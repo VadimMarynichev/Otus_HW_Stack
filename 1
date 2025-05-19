@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+
+public class Stack
+{
+    private readonly List<string> _items = new List<string>();
+
+ 
+    public Stack(params string[] initialItems)
+    {
+        foreach (var item in initialItems)
+        {
+            Add(item);
+        }
+    }
+
+    public void Add(string item)
+    {
+        _items.Add(item);
+    }
+
+    public string Pop()
+    {
+        if (_items.Count == 0)
+        {
+            throw new InvalidOperationException("Стек пустой");
+        }
+
+        var lastIndex = _items.Count - 1;
+        var item = _items[lastIndex];
+        _items.RemoveAt(lastIndex);
+        return item;
+    }
+
+    public int Size => _items.Count;
+
+
+    public string? Top => _items.Count > 0 ? _items[_items.Count - 1] : null;
+
+
+    public static Stack Concat(params Stack[] stacks)
+    {
+        var result = new Stack();
+
+
+        foreach (var stack in stacks)
+        {
+
+            var tempItems = new List<string>();
+
+
+            while (stack.Size > 0)
+            {
+                tempItems.Add(stack.Pop());
+            }
+
+
+            for (int i = tempItems.Count - 1; i >= 0; i--)
+            {
+                result.Add(tempItems[i]);
+            }
+
+            for (int i = 0; i < tempItems.Count; i++)
+            {
+                stack.Add(tempItems[i]);
+            }
+        }
+
+        return result;
+    }
+}
